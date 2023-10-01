@@ -1,0 +1,7 @@
+-- Made in Monday, December 28 2020
+-- 10:27 WST (probably)
+-- This model was made by Cr0ckee.
+-- Please DM me if somebody reuploads or somebody stolen it.
+-- The PS4 WAS NOT made by me. Ken Kurtagi is the founder of Sony Interactive Entertainment.
+-- AND has the right to delete this model by thier own original owners.
+-- I was bored so i made the model.
