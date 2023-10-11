@@ -1,3 +1,6 @@
+---@diagnostic disable: undefined-type
+--!strict
+
 local _internal = require(script.Parent._internal)
 local Notation = require(script.Notation)
 local Precision = require(script.Precision)

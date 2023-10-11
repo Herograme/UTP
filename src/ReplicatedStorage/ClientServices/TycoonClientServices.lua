@@ -1,11 +1,19 @@
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local RunService = game:GetService("RunService")
 local TweenService = game:GetService("TweenService")
 local Players = game:GetService("Players")
 local Player = Players.LocalPlayer
 
-local Remotes = ReplicatedStorage.Remotes
+local BridgeNet = require(ReplicatedStorage.Packages.bridgenet2)
+local SimplePath = require(ReplicatedStorage.Packages.simplepath)
+
+local TycoonEvents = BridgeNet.ReferenceBridge("TycoonEvents")
+local MinionSpawned = BridgeNet.ReferenceBridge("MinionSpawned")
+
+
 local DbTb = {}
 local ButtonsList = {}
+local MinionsThreads = {}
 
 
 local TWEEN_TIME = 3
@@ -39,7 +47,7 @@ end
 
 
 
-Remotes.TycoonEvents.OnClientEvent:Connect(function(Event,...)
+TycoonEvents:Connect(function(pars)
     local TycoonEvents = {
         ["TycoonPurchase"] = function(Model,PlayerOwner)
             if PlayerOwner == Player then
@@ -63,7 +71,7 @@ Remotes.TycoonEvents.OnClientEvent:Connect(function(Event,...)
 
                         if PlayerHit == Player and DbTb[Button.Name] ~= true  then
                             DbTb[Button.Name] = true
-                            Remotes.TycoonFunctions:InvokeServer("Buy",Button)
+                            TycoonEvents:Fire("Buy",Button)
                             task.wait(1) 
                             DbTb[Button.Name] = nil
                             
@@ -94,7 +102,7 @@ Remotes.TycoonEvents.OnClientEvent:Connect(function(Event,...)
 
                         if PlayerHit == Player and DbTb[Button.Name] ~= true  then
                             DbTb[Button.Name] = true
-                            Remotes.TycoonFunctions:InvokeServer("Buy",Button)
+                           -- Remotes.TycoonFunctions:InvokeServer("Buy",Button)
                             DbTb[Button.Name] = nil
                            
                         end
@@ -122,7 +130,7 @@ Remotes.TycoonEvents.OnClientEvent:Connect(function(Event,...)
 
                             if PlayerHit == Player and DbTb[Button.Name] ~= true then
                                 DbTb[Button.Name] = true
-                                Remotes.TycoonFunctions:InvokeServer("Buy",Button)
+                                --Remotes.TycoonFunctions:InvokeServer("Buy",Button)
                                 task.wait(1)
                                 DbTb[Button.Name] = nil
                                 
@@ -132,26 +140,88 @@ Remotes.TycoonEvents.OnClientEvent:Connect(function(Event,...)
                 end
             end)
         end,
-        ["EffectSpawnItem"] = function(Item,Type)
-           
+        ["SpawnItemAnimate"] = function(pairs)
+            local CFrameValue = Instance.new("CFrameValue")
+            local tweenInfo = TweenInfo.new(TWEEN_TIME,TWEEN_STYLE,TWEEN_DIRECTION,TWEEN_LOOP,TWEEN_REVERSE,TWEEN_DELAY)
+            local tweenParameter = {Value = pairs.Destiny}
+            local tweenAnimate = TweenService.Create(CFrameValue,tweenInfo,tweenParameter)
+            tweenAnimate:Play()
+
+            CFrameValue.Changed:Connect(function()
+                pairs.Item:PivotTo(CFrameValue.Value)
+            end)
+            
         end,
+        
+       
     }
    
 --[[ 
     end)]]
 
-    local Event = TycoonEvents[Event]
+    local Event = TycoonEvents[pars.func]
     
-    if Event then Event(...) end
+    if Event then Event(pars.content) end
 end)
 
+MinionSpawned:Connect(function(pars)
+    local data = pars.data
+    local minion = pars.minion
+    local replicator = pars.replicator
+    local tycoonModel = pars.tycoonModel
 
+    if not data or not minion or not replicator or not tycoonModel then return end 
 
- module = {
-    EffectsFunction = {}
+    local MinionPath = SimplePath.new(minion)
+    --WAY_POINT1
+    local PathList = {}
 
+    for i,PathPoint in pairs(tycoonModel.MainItems.ConveyorBelt.Path:GetChildren())do
+        PathList[PathPoint.Name] = PathPoint
+    end
+    local PathCurrent = PathList["WAY_POINT1"]
+    minion:PivotTo(replicator.Spawner:GetPivot())
+    minion.Parent = tycoonModel.MinionsSpawned
 
-}
+    MinionPath:Run(PathCurrent)
+
+    local PathsNumber = 2
+    MinionPath._events.Reached:Connect(function()
+
+        if PathCurrent.Name == "GOAL" then
+            MinionPath:Stop()
+            MinionPath:Destroy()
+        end
+
+        PathCurrent = PathList["WAY_POINT"..tostring(PathsNumber)]
+        if not PathCurrent then
+            PathCurrent = PathList["GOAL"]
+        end
+ 
+        PathsNumber += 1
+        MinionPath:Run(PathCurrent)
+    end)
+
+    MinionPath._events.Blocked:Connect(function()
+        MinionPath:Run(PathCurrent)
+    end)
+    
+    MinionPath._events.Error:Connect(function()
+        MinionPath:Run(PathCurrent)
+    end)
+
+    MinionPath._events.Stopped:Connect(function()
+        MinionPath:Run(PathCurrent)
+    end)
+
+    --[[MinionsThreads[minion.Name] = RunService.RenderStepped:Connect(function()
+        
+    end)]]
+
+    
+end)
+
+module = {}
 
 
 

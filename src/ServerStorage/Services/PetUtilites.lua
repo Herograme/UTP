@@ -7,7 +7,7 @@ local EggsDataMeta = require(ReplicatedStorage.EggDataMeta)
 local PlayerUtilities = require(ServerStorage.Services.PlayerUtilites)
 local InventoryMananger = require(ServerStorage.Services.InventoryMananger)
 
-local Remotes = ReplicatedStorage.Remotes
+--local Remotes = ReplicatedStorage.Remotes
 
 
 

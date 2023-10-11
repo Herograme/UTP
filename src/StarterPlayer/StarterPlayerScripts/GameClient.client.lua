@@ -1,5 +1,14 @@
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
-local Remotes = ReplicatedStorage.Remotes
+------------
+--Create Remotes
+local bridgenet = require(ReplicatedStorage.Packages.bridgenet2)
+
+bridgenet.ClientBridge("GuiEvents")
+bridgenet.ClientBridge("TycoonEvents")
+bridgenet.ClientBridge("MinionSpawned")
+local EffectsController = bridgenet.ClientBridge("EffectsController")
+local EggsEvent = bridgenet.ClientBridge("EggsEvent")
+------------
 
 local TycoonUtilites = require(ReplicatedStorage.ClientServices.TycoonClientServices)
 local EggUtilities = require(ReplicatedStorage.ClientServices.PetClientsService)
@@ -7,32 +16,21 @@ local Inputs =  require(ReplicatedStorage.ClientServices.Inputs)
 
 Inputs.InputStartPC()
 
-Remotes.EffectsController.OnClientEvent:Connect(function(func,Argument)
-    
-
-  
-
-    local EffectFunctionTemp = TycoonUtilites.EffectsFunction[func] 
+EffectsController:Connect(function(Pars)
+    local EffectFunctionTemp = TycoonUtilites.EffectsFunction[Pars.func] 
 
     if  not EffectFunctionTemp then return end 
 
-    EffectFunctionTemp(Argument)
-    
-
-
+    EffectFunctionTemp(Pars.content)
 end)
 
 
-Remotes.EggsEvent.OnClientEvent:Connect(function(FuncREQ,Argument)
-    
-  
-    local FuncTemp = EggUtilities.EggsEvent[FuncREQ]
+EggsEvent:Connect(function(Pars)
+    local FuncTemp = EggUtilities.EggsEvent[Pars.func]
 
     if not  FuncTemp then return end 
 
-    FuncTemp(Argument)
-
-
+    FuncTemp(Pars.content)
 end)
 
 

@@ -4,32 +4,29 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local CollectionService = game:GetService("CollectionService")
 local teleportService = game:GetService("TeleportService")
 
-local TycoonService = require(ServerStorange.Services.TycoonUtilites)
---local InventoryMananger = require(ServerStorange.Services.InventoryMananger)
-local DataMananger = require(ServerStorange.Services.DataMananger)
 
-local Remotes = ReplicatedStorage.Remotes
+--local InventoryMananger = require(ServerStorange.Services.InventoryMananger)
+--local DataMananger = require(ServerStorange.Services.DataMananger)
+local BridgeNet = require(ReplicatedStorage.Packages.bridgenet2)
+
+---------------
+--Remotes
+local TycoonEvents = BridgeNet.ReferenceBridge("TycoonEvents")
+local GuiEvents =  BridgeNet.ReferenceBridge("GuiEvents")
+---------------
 
 local mainFolder_Workspace = workspace
 local playersPets =mainFolder_Workspace.PlayerData.PlayerPets
 
 game.Players.PlayerAdded:Connect(function(player)
-	
     player:SetAttribute("Cash",0)
     player:SetAttribute("Shards",0)
     player:SetAttribute("OwnsTycoon",false)
 
-	TycoonService:PlayerInit(player)
-    
-
+    local TycoonBases = workspace.TycoonModels:GetChildren()
 	
-
-	for _,v in pairs(workspace.TycoonModels:GetChildren()) do
-		Remotes.EffectsController:FireClient(player,"OuterButtonsDestroyer",v)
-	end
-	
-	
-	
+	--TycoonEvents:Fire(player,{Func="OuterButtonsDestroyer",content = TycoonBases})
+    GuiEvents:Fire(player,{Func="Load"})
 end)
 
 
@@ -39,33 +36,26 @@ end)
 
 
 
-Players.PlayerRemoving:Connect(function(player)
-
-        print(TycoonService:GetPlayerCache(player))
+--[[Players.PlayerRemoving:Connect(function(player)
+        
 	--TycoonService.DoorReset(player)
-
-
-end)
+end)]]
 
 
 
 
 function TeleportPlayer(player)
-    
     local sucess, err = pcall(teleportService.Teleport, teleportService, 13896208273, player)
     
     if not sucess then
         warn(`Error while teleporting player ({player.UserId}) when the BindToClose is called: {err}`)
     end
-    
 end
 
 function BindToClose()
-    
     for index, player in Players:GetPlayers() do
         task.spawn(TeleportPlayer, player)
     end
-    
 end
 
 game:BindToClose(BindToClose)

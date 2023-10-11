@@ -6,16 +6,29 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local DbAll = {}
 
+local BridgeNet = require(ReplicatedStorage.Packages.bridgenet2)
+----------------
+--Create Remotes 
 
+ local GuiEvents =BridgeNet.ServerBridge("GuiEvents")
+ local TycoonEvents = BridgeNet.ServerBridge("TycoonEvents")
+ local EggsEvent = BridgeNet.ServerBridge("EggsEvent")
+ local MinionSpawned =  BridgeNet.ServerBridge("MinionSpawned")
+ local EffectsController = BridgeNet.ServerBridge("EffectsController")
 
-
-local Remotes = ReplicatedStorage.Remotes
+ 
+ GuiEvents.Logging = true
+ TycoonEvents.Logging = true
+ EggsEvent.Logging = true
+ MinionSpawned.Logging = true
+ EffectsController.Logging = true
+----------------
 
 local DataMananger =require(ServerStorage.Services.DataMananger)
 local InventoryMananger =  require(ServerStorage.Services.InventoryMananger)
 local PlayerUtilities = require(ServerStorage.Services.PlayerUtilites)
 local PetUtilites = require(ServerStorage.Services.PetUtilites)
-local TycoonManger = require(ServerStorage.Services.TycoonMananger)
+local TycoonMananger = require(ServerStorage.Services.TycoonMananger)
 local utilities = require(ServerStorage.Services.Utilities)
 
 
@@ -33,13 +46,13 @@ end
 
 
 DataMananger:Init()
-TycoonManger:Init()
+TycoonMananger:Init()
 InventoryMananger:Init()
-TycoonManger.ConnectTycoonDoor()
+TycoonMananger:ConnectTycoonDoor()
 
-Remotes.EggsEvent.OnServerEvent:Connect(function(Player,Func,...)
+EggsEvent:Connect(function(Player,pars)
     
-    warn("Recebi",Player,Func,...)
+    --[[warn("Recebi",Player,Func,...)
 
     if DbAll[Player.UserId..Func] == true then return end 
 
@@ -59,7 +72,7 @@ Remotes.EggsEvent.OnServerEvent:Connect(function(Player,Func,...)
     end)
 
     --local PlayersInventory = InventoryMananger.GetPlayerInventory(Player)
-    --print(PlayersInventory)
+    --print(PlayersInventory)]]
 end)
 
 

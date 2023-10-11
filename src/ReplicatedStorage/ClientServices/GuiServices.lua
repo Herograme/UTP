@@ -2,7 +2,7 @@ local Lighting = game:GetService("Lighting")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local RunService = game:GetService("RunService")
 
-local remotes = ReplicatedStorage.Remotes
+
 
 local player = game.Players.LocalPlayer
 local playerGui = player.PlayerGui
@@ -19,6 +19,12 @@ local NumberFormat = require(ReplicatedStorage.FormatNumber.Custom)
 local Module3D = require(ReplicatedStorage.Module3D)
 local PowerDatas= require(ReplicatedStorage.PowersData)
 local TycoonClient = require(ReplicatedStorage.ClientServices.TycoonClientServices)
+local BridgeNet = require(ReplicatedStorage.Packages.bridgenet2)
+---------------------------------------------------------------------
+--Remotes
+
+local GuiEvents =  BridgeNet.ReferenceBridge("GuiEvents")
+local TycoonEvents = BridgeNet.ReferenceBridge("TycoonEvents")
 
 ---------------------------------------------------------------------
 
@@ -94,12 +100,10 @@ local function PopUpPersonsLoad(anime)
                
                 if not newTemplate:GetAttribute("Unavailable") then
 
-                    if remotes.TycoonFunctions:InvokeServer("PersonChosen",Person) then
-                        Lighting.Blur.Enabled = false 
-                        ChosenGui.Enabled = false
-                        print("Tycoon Loaded")
-                        
-                    end
+                    TycoonEvents:Fire({func = "PersonChosen",content = Person}) 
+                    Lighting.Blur.Enabled = false 
+                    ChosenGui.Enabled = false
+                    DisconnectGui()
 
                 end
 
@@ -132,7 +136,7 @@ local function PopUpPersonsList(ScrollingTemplate,State)
 
 end
 
-return {
+module =  {
 
 
     UpdateGuiState1 =   function(State)
@@ -198,11 +202,10 @@ return {
 
 
 
-        ["Chosen"] = function(State)
-            ChosenGui.Enabled = State
-            Lighting.Blur.Enabled = State 
-
-           
+        ["Chosen"] = function(content)
+            print(content)
+            ChosenGui.Enabled = content
+            Lighting.Blur.Enabled = content
         end,
         ["Load"] =  function()
 
@@ -254,3 +257,13 @@ return {
         
     }
 }
+
+GuiEvents:Connect(function(pars)
+    local Event = module.GuiControl[pars.func] 
+
+    if Event then
+        Event(pars.content)
+    end
+end)
+
+return module

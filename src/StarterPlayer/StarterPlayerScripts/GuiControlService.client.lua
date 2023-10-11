@@ -1,7 +1,10 @@
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local GuiServices =  require(ReplicatedStorage.ClientServices.GuiServices)
+local BridgeNet  = require(ReplicatedStorage.Packages.bridgenet2)
 
-local remotes = ReplicatedStorage.Remotes
+--local remotes = ReplicatedStorage.Remotes
+
+--local GuiEvents = BridgeNet.ReferenceBridge("GuiEvents")
 
 
 local player = game.Players.LocalPlayer
@@ -102,7 +105,7 @@ OpenGuiButton.MouseLeave:Connect(function()
 end)
 
 
-remotes.GuiControl.OnClientEvent:Connect(function(Gui,State)
+--[[GuiEvents:Connect(function(pars)
 
 
 	local GuiFunction = GuiServices.GuiControl[Gui]
@@ -111,5 +114,5 @@ remotes.GuiControl.OnClientEvent:Connect(function(Gui,State)
 	GuiFunction(State)
 	
 
-end)
+end)]]
 

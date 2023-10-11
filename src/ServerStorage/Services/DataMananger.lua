@@ -15,16 +15,12 @@ end
 local ProfileService = require(ServerStorage.Services.Profile.ProfileService)
 
 
-
 local players = game:GetService("Players")
 
 local AnimeTemplate = {
-
-	ToPurchase = {},
     Purchased = {},
-   
+	Replicators = {}
 	
-
 }
 
 local profileTemplate = {
@@ -35,9 +31,6 @@ local profileTemplate = {
     Cash = 15,
     Shards = 15,
 	World = "Namek",
-	
-	
-
 }	
 
 --game:GetService("DataStoreService"):GetDataStore("playerData")
@@ -58,8 +51,6 @@ function onPlayerAdded(player)
 	
 	if player:IsDescendantOf(players) then
 		profiles[player.UserId] = profile
-		
-		
 	else
 		profile:Release() -- Libera a data para poder carregar em outros servidores
 	end

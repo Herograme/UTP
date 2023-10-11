@@ -3,12 +3,12 @@ local Player = Players.LocalPlayer
 local ContextActionService = game:GetService("ContextActionService")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
-local Remotes = ReplicatedStorage.Remotes
+--local Remotes = ReplicatedStorage.Remotes
 
 
 function FireEgg(EggName,Input)
 
-    Remotes.EggsEvent:FireServer("HatchEgg",EggName,Input)
+    --Remotes.EggsEvent:FireServer("HatchEgg",EggName,Input)
     
 end
 
