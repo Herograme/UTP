@@ -54,7 +54,7 @@ function module:GetMinionData(MinionName)
        return {
         Name = "Noob",
         Value = 15,
-        Model = FolderMinions
+        Model = FolderMinions.Dummy
        }
     end
 

@@ -20,11 +20,16 @@ local Module3D = require(ReplicatedStorage.Module3D)
 local PowerDatas= require(ReplicatedStorage.PowersData)
 local TycoonClient = require(ReplicatedStorage.ClientServices.TycoonClientServices)
 local BridgeNet = require(ReplicatedStorage.Packages.bridgenet2)
+local SkillAnimator = require(ReplicatedStorage.ClientServices.SkillAnimator)
 ---------------------------------------------------------------------
 --Remotes
 
 local GuiEvents =  BridgeNet.ReferenceBridge("GuiEvents")
 local TycoonEvents = BridgeNet.ReferenceBridge("TycoonEvents")
+local GuiLoader =  BridgeNet.ReferenceBridge("GuiLoader")
+
+GuiEvents.Logging = true
+GuiLoader.Logging = true
 
 ---------------------------------------------------------------------
 
@@ -103,6 +108,7 @@ local function PopUpPersonsLoad(anime)
                     TycoonEvents:Fire({func = "PersonChosen",content = Person}) 
                     Lighting.Blur.Enabled = false 
                     ChosenGui.Enabled = false
+                    SkillAnimator:PreLoadAnimations(Person)
                     DisconnectGui()
 
                 end
@@ -198,72 +204,61 @@ module =  {
     end,
     
     GuiControl = {
-
-
-
-
         ["Chosen"] = function(content)
             print(content)
             ChosenGui.Enabled = content
             Lighting.Blur.Enabled = content
-        end,
-        ["Load"] =  function()
-
-
-           for _,anime in pairs(PowerDatas.Animes) do
-            local newTemplate = template:Clone()
-            
-            local AnimeModelTemp = PowerDatas.AnimeModels[anime]
-
-            
-
-            if AnimeModelTemp then
-                
-
-                local AnimeModel = AnimeModelTemp:Clone()
-
-                local Template3D =Module3D:Attach3D(newTemplate,AnimeModel)
-                Template3D:SetActive(true)
-                Template3D:SetDepthMultiplier(4)
-
-                newTemplate.Name = anime
-                newTemplate.Visible = true 
-                newTemplate.Parent = ChosenGui.BackFrame
-
-                newTemplate.TextLabel.Text = anime
-
-                GuiTreads["TycoonChosen"][anime] = RunService.RenderStepped:Connect(function()
-                    Template3D:SetCFrame(CFrame.Angles(0,tick() % (math.pi * 2),0)
-                     * CFrame.Angles(math.rad(-10),0,0))
-                end)
-
-                local PopUPframe = PopUpPersonsLoad(anime)
-
-                newTemplate.TextButton.Activated:connect(function()
-                         
-                    PopUpPersonsList(PopUPframe,true)
-
-                end)
-
-
-            end
-
-
-
-           end
-        end
-
-
-        
+        end, 
     }
 }
 
 GuiEvents:Connect(function(pars)
     local Event = module.GuiControl[pars.func] 
-
-    if Event then
+    print(Event)
+    --if Event then
         Event(pars.content)
+    --end
+end)
+
+GuiLoader:Connect(function(Value)
+    warn("Load")
+
+    for _,anime in pairs(PowerDatas.Animes) do
+
+       
+
+        local newTemplate = template:Clone()
+         
+        local AnimeModelTemp = PowerDatas.AnimeModels[anime]
+
+        if AnimeModelTemp then
+             local AnimeModel = AnimeModelTemp:Clone()
+
+             local Template3D =Module3D:Attach3D(newTemplate,AnimeModel)
+             Template3D:SetActive(true)
+             Template3D:SetDepthMultiplier(4)
+
+             newTemplate.Name = anime
+             newTemplate.Visible = true 
+             newTemplate.Parent = ChosenGui.BackFrame
+
+             newTemplate.TextLabel.Text = anime
+
+             GuiTreads["TycoonChosen"][anime] = RunService.RenderStepped:Connect(function()
+                Template3D:SetCFrame(CFrame.Angles(0,tick() % (math.pi * 2),0)
+                * CFrame.Angles(math.rad(-10),0,0))
+             end)
+
+             local PopUPframe = PopUpPersonsLoad(anime)
+
+             newTemplate.TextButton.Activated:connect(function()
+                PopUpPersonsList(PopUPframe,true)
+             end)
+         end
     end
 end)
+
+
+
 
 return module

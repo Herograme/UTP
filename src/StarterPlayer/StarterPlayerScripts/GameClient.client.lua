@@ -1,4 +1,13 @@
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local ReplicatedFirst = game:GetService("ReplicatedFirst")
+------------
+--GameInizializer
+
+local GameLoading = require(ReplicatedFirst.GameLoading.GameLoadingService)
+
+GameLoading:Init()
+task.wait()
+
 ------------
 --Create Remotes
 local bridgenet = require(ReplicatedStorage.Packages.bridgenet2)
@@ -6,15 +15,29 @@ local bridgenet = require(ReplicatedStorage.Packages.bridgenet2)
 bridgenet.ClientBridge("GuiEvents")
 bridgenet.ClientBridge("TycoonEvents")
 bridgenet.ClientBridge("MinionSpawned")
+bridgenet.ClientBridge("GuiLoader")
+bridgenet.ClientBridge("ItemSpawned")
+bridgenet.ClientBridge("FireSkill")
 local EffectsController = bridgenet.ClientBridge("EffectsController")
 local EggsEvent = bridgenet.ClientBridge("EggsEvent")
+
+
+
 ------------
 
 local TycoonUtilites = require(ReplicatedStorage.ClientServices.TycoonClientServices)
 local EggUtilities = require(ReplicatedStorage.ClientServices.PetClientsService)
 local Inputs =  require(ReplicatedStorage.ClientServices.Inputs)
+local SkillAnimator = require(ReplicatedStorage.ClientServices.SkillAnimator)
+
+local Cmdr = require(ReplicatedStorage:WaitForChild("CmdrClient"))
+
+
+Cmdr:SetActivationKeys({ Enum.KeyCode.F2 })
 
 Inputs.InputStartPC()
+
+SkillAnimator:init()
 
 EffectsController:Connect(function(Pars)
     local EffectFunctionTemp = TycoonUtilites.EffectsFunction[Pars.func] 

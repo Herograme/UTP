@@ -1,0 +1,43 @@
+Date : 2023-10-24 01:17:26
+Directory : d:\ROBLOX STUDIO\Rojo\UTP\src
+Total : 9 files,  86 codes, 2 comments, 23 blanks, all 111 lines
+
+Languages
++----------+------------+------------+------------+------------+------------+
+| language | files      | code       | comment    | blank      | total      |
++----------+------------+------------+------------+------------+------------+
+| Lua      |          9 |         86 |          2 |         23 |        111 |
++----------+------------+------------+------------+------------+------------+
+
+Directories
++----------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| path                                                                             | files      | code       | comment    | blank      | total      |
++----------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| .                                                                                |          9 |         86 |          2 |         23 |        111 |
+| ReplicatedFirst                                                                  |          1 |          1 |          0 |          0 |          1 |
+| ReplicatedFirst\GameLoading                                                      |          1 |          1 |          0 |          0 |          1 |
+| ReplicatedStorage                                                                |          2 |        -13 |          2 |          2 |         -9 |
+| ReplicatedStorage\ClientServices                                                 |          2 |        -13 |          2 |          2 |         -9 |
+| ServerScriptService                                                              |          1 |          2 |          0 |          0 |          2 |
+| ServerStorage                                                                    |          5 |         96 |          0 |         21 |        117 |
+| ServerStorage\Services                                                           |          2 |          5 |          0 |         -8 |         -3 |
+| ServerStorage\SkillSystem                                                        |          3 |         91 |          0 |         29 |        120 |
+| ServerStorage\SkillSystem (Files)                                                |          2 |         56 |          0 |         18 |         74 |
+| ServerStorage\SkillSystem\Skills                                                 |          1 |         35 |          0 |         11 |         46 |
++----------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+
+Files
++----------------------------------------------------------------------------------+----------+------------+------------+------------+------------+
+| filename                                                                         | language | code       | comment    | blank      | total      |
++----------------------------------------------------------------------------------+----------+------------+------------+------------+------------+
+| d:\ROBLOX STUDIO\Rojo\UTP\src\ReplicatedFirst\GameLoading\GameLoadingService.lua | Lua      |          1 |          0 |          0 |          1 |
+| d:\ROBLOX STUDIO\Rojo\UTP\src\ReplicatedStorage\ClientServices\Inputs.lua        | Lua      |        -16 |          2 |          1 |        -13 |
+| d:\ROBLOX STUDIO\Rojo\UTP\src\ReplicatedStorage\ClientServices\SkillAnimator.lua | Lua      |          3 |          0 |          1 |          4 |
+| d:\ROBLOX STUDIO\Rojo\UTP\src\ServerScriptService\GameServices.server.lua        | Lua      |          2 |          0 |          0 |          2 |
+| d:\ROBLOX STUDIO\Rojo\UTP\src\ServerStorage\Services\InventoryMananger.lua       | Lua      |          9 |          0 |         -1 |          8 |
+| d:\ROBLOX STUDIO\Rojo\UTP\src\ServerStorage\Services\SkillMananger.lua           | Lua      |         -4 |          0 |         -7 |        -11 |
+| d:\ROBLOX STUDIO\Rojo\UTP\src\ServerStorage\SkillSystem\CommonFuncs.lua          | Lua      |         28 |          0 |         11 |         39 |
+| d:\ROBLOX STUDIO\Rojo\UTP\src\ServerStorage\SkillSystem\HitBoxMananger.lua       | Lua      |         28 |          0 |          7 |         35 |
+| d:\ROBLOX STUDIO\Rojo\UTP\src\ServerStorage\SkillSystem\Skills\Blue.lua          | Lua      |         35 |          0 |         11 |         46 |
+| Total                                                                            |          |         86 |          2 |         23 |        111 |
++----------------------------------------------------------------------------------+----------+------------+------------+------------+------------+

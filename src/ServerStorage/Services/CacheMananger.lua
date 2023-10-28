@@ -1,4 +1,5 @@
 module =  {}
+module.persons_selected = {}
 
 local Players = game:GetService("Players")
 local ServerStorage = game:GetService("ServerStorage")
@@ -12,7 +13,7 @@ CacheMethods.__index = CacheMethods
 
 function CreateCache(Player)
 
-    CacheMethods = {
+    local Cache = {
         ["Anime"] = false,
         ["Person"] = false,
         ["Owner"] = Player,
@@ -22,10 +23,12 @@ function CreateCache(Player)
         ["TycoonTemplate"] = false,
         ["TycoonCash"] = 0,
         ["TycoonModel"] = false,
-        ["ReplicatorList"] = {}
+        ["ReplicatorList"] = {},
+        ["AnimationLoad"] = {}
     }
+    
 
-    return setmetatable({},CacheMethods)
+    return setmetatable(Cache,CacheMethods)
 end
 
 function CacheMethods:SetTycoonBase(Model:Model)
@@ -57,11 +60,32 @@ function CacheMethods:AddThreads(Name,func)
     self.Threads[Name] = task.spawn(func)
 end
 
+function CacheMethods:PersonSelected(Person)
+    self.Person = Person
+    table.insert(module.persons_selected,Person)
+end
+
+function CacheMethods:AddTycoonCash(Value)
+    self.TycoonCash += Value
+    self.TycoonModel:SetAttribute("Cash",self.TycoonCash)    
+end
+
+function  CacheMethods:AddAnimationTrack(Name,AnimationTrack)
+    self.AnimationLoad[Name] = AnimationTrack
+end
+
+function CacheMethods:GetAnimationTrack(name)
+    if self.AnimationLoad[name] then
+       return self.AnimationLoad[name]
+    end
+end
+-------------------------------//----------------------------------
 function PlayerAdd(Player)
     Caches[Player.UserId] = CreateCache(Player)
 end
 
 function PlayerRemoving(Player)
+    print(Caches[Player.UserId])
     Caches[Player.UserId] = nil
 end
 
@@ -72,13 +96,13 @@ function module:GetPlayerCache(Player)
     return Caches[Player.UserId]
 end
 
-function module:CheckPersonAvailable(Person)
-    for _,Cache in pairs(Caches) do
-        if Cache.Person == Person then
-            return false
-        end
-    end
 
+
+function module:CheckPersonAvailable(Person)
+    print(Person)
+    if table.find(module.persons_selected,Person) then
+        return false
+    end
     return true 
 end
 

@@ -15,6 +15,9 @@ local BridgeNet = require(ReplicatedStorage.Packages.bridgenet2)
  local EggsEvent = BridgeNet.ServerBridge("EggsEvent")
  local MinionSpawned =  BridgeNet.ServerBridge("MinionSpawned")
  local EffectsController = BridgeNet.ServerBridge("EffectsController")
+ local GuiLoader = BridgeNet.ServerBridge("GuiLoader")
+ local ItemSpawned = BridgeNet.ServerBridge("ItemSpawned")
+ local FireSkill = BridgeNet.ServerBridge("FireSkill")
 
  
  GuiEvents.Logging = true
@@ -22,6 +25,7 @@ local BridgeNet = require(ReplicatedStorage.Packages.bridgenet2)
  EggsEvent.Logging = true
  MinionSpawned.Logging = true
  EffectsController.Logging = true
+ GuiLoader.Logging = true
 ----------------
 
 local DataMananger =require(ServerStorage.Services.DataMananger)
@@ -30,6 +34,11 @@ local PlayerUtilities = require(ServerStorage.Services.PlayerUtilites)
 local PetUtilites = require(ServerStorage.Services.PetUtilites)
 local TycoonMananger = require(ServerStorage.Services.TycoonMananger)
 local utilities = require(ServerStorage.Services.Utilities)
+local SkillMananger = require(ServerStorage.Services.SkillMananger)
+local HitBoxMananger = require(ServerStorage.SkillSystem.HitBoxMananger)
+
+local cmdr = require(ReplicatedStorage.Packages.cmdr)
+
 
 
 --------------
@@ -44,65 +53,12 @@ _G.SetMoney = function(Value)
 end
 --------------
 
+cmdr:RegisterDefaultCommands()
 
 DataMananger:Init()
 TycoonMananger:Init()
 InventoryMananger:Init()
+SkillMananger:Init()
+HitBoxMananger:Init()
 TycoonMananger:ConnectTycoonDoor()
-
-EggsEvent:Connect(function(Player,pars)
-    
-    --[[warn("Recebi",Player,Func,...)
-
-    if DbAll[Player.UserId..Func] == true then return end 
-
-    DbAll[Player.UserId..Func] = true 
-
-    local tempFunc = PetUtilites[Func]
-
-
-
-    if tempFunc then 
-        tempFunc(Player,...)
-    end    
-
-    task.spawn(function()
-        task.wait(2)
-        DbAll[Player.UserId..Func] = false
-    end)
-
-    --local PlayersInventory = InventoryMananger.GetPlayerInventory(Player)
-    --print(PlayersInventory)]]
-end)
-
-
-
-
-
-
-
-
---local function LoadModelTycoon (Player,TycoonModel)
-    
---
-
-
-
-
-
-
-
-
-
---Remotes.ChosenTycoon.OnServerEvent:Connect()
-
-
-
-
-
-
-
-
-
-
 

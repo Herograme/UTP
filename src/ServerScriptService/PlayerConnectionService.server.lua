@@ -3,6 +3,7 @@ local ServerStorange = game:GetService("ServerStorage")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local CollectionService = game:GetService("CollectionService")
 local teleportService = game:GetService("TeleportService")
+local ContentProvider = game:GetService("ContentProvider")
 
 
 --local InventoryMananger = require(ServerStorange.Services.InventoryMananger)
@@ -12,7 +13,7 @@ local BridgeNet = require(ReplicatedStorage.Packages.bridgenet2)
 ---------------
 --Remotes
 local TycoonEvents = BridgeNet.ReferenceBridge("TycoonEvents")
-local GuiEvents =  BridgeNet.ReferenceBridge("GuiEvents")
+local GuiLoader =  BridgeNet.ReferenceBridge("GuiLoader")
 ---------------
 
 local mainFolder_Workspace = workspace
@@ -22,27 +23,26 @@ game.Players.PlayerAdded:Connect(function(player)
     player:SetAttribute("Cash",0)
     player:SetAttribute("Shards",0)
     player:SetAttribute("OwnsTycoon",false)
+    player:SetAttribute("CurrentInput","Skill")
+
+    player:SetAttribute("Q","Red")
+    player:SetAttribute("E","Blue")
+    player:SetAttribute("R","Purple")   
 
     local TycoonBases = workspace.TycoonModels:GetChildren()
 	
 	--TycoonEvents:Fire(player,{Func="OuterButtonsDestroyer",content = TycoonBases})
-    GuiEvents:Fire(player,{Func="Load"})
+    
+    player.CharacterAdded:Connect(function()
+        GuiLoader:Fire(player,{"load"}) 
+    end)   
 end)
-
-
-
-
-
-
 
 
 --[[Players.PlayerRemoving:Connect(function(player)
         
 	--TycoonService.DoorReset(player)
 end)]]
-
-
-
 
 function TeleportPlayer(player)
     local sucess, err = pcall(teleportService.Teleport, teleportService, 13896208273, player)

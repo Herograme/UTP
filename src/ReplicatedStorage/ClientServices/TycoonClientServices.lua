@@ -3,35 +3,40 @@ local RunService = game:GetService("RunService")
 local TweenService = game:GetService("TweenService")
 local Players = game:GetService("Players")
 local Player = Players.LocalPlayer
+local Character = Player.Character
 
 local BridgeNet = require(ReplicatedStorage.Packages.bridgenet2)
 local SimplePath = require(ReplicatedStorage.Packages.simplepath)
+local PowerDatas = require(ReplicatedStorage.PowersData)
 
 local TycoonEvents = BridgeNet.ReferenceBridge("TycoonEvents")
 local MinionSpawned = BridgeNet.ReferenceBridge("MinionSpawned")
-
+local ItemSpawned = BridgeNet.ReferenceBridge("ItemSpawned")
+ItemSpawned.Logging = true
 
 local DbTb = {}
 local ButtonsList = {}
-local MinionsThreads = {}
 
-
-local TWEEN_TIME = 3
+local TWEEN_TIME = 4
 local TWEEN_STYLE = Enum.EasingStyle.Linear
 local TWEEN_DIRECTION = Enum.EasingDirection.Out
 local TWEEN_LOOP = 1
 local TWEEN_REVERSE = false
 local TWEEN_DELAY = 0.5
 
+local tweenInfo = TweenInfo.new(TWEEN_TIME,TWEEN_STYLE,TWEEN_DIRECTION,TWEEN_LOOP,TWEEN_REVERSE,TWEEN_DELAY)
 
-
-
-
-function ButtonAdded(TycoonModel)
-    TycoonModel.Buttons.ChildAdded:Connect(function(Button)
-         
+if not Character then
+    task.spawn(function()
+        while task.wait(1) do
+            Character = Player.Character
+            if Character then
+                break
+            end     
+        end
     end)
-end
+end     
+
 
 function TweenEffect(SubItem,Type) 
     local tweenInfo = TweenInfo.new(TWEEN_TIME,TWEEN_STYLE,TWEEN_DIRECTION,TWEEN_LOOP,TWEEN_REVERSE,TWEEN_DELAY)
@@ -54,33 +59,42 @@ TycoonEvents:Connect(function(pars)
                 Model.Buttons.Parent = nil  
             end
         end,
-        ["TycoonStart"] =function(TycoonModel)
-            for _,Button in pairs (TycoonModel.Buttons:GetChildren()) do
-               
-                local ButtonDatas = Button:GetAttributes()
-                Button.ButtonPart.BillboardGui.Frame.TextLabel.Text = ButtonDatas.NameButton.." - ".. ButtonDatas.Price.."$"
+        ["TycoonStart"] =function(content)
+            
+            local anime = content.anime
+            local tycoon = content.tycoon
+           
+            if not anime or not tycoon then return end 
+           
+            local NewFolder =  Instance.new("Folder")
+            NewFolder.Name = "Buttons"
+            NewFolder.Parent = tycoon
+           
+            local AnimeModel = PowerDatas:GetAnimeModel(anime)
 
-                if Button:GetAttribute("Dependency") then
-                    ButtonsList[Button.Name] = Button
-                    Button.Parent = nil
-                else
-                    DbTb[Button.Name] = false
-                    Button.ButtonPart.Touched:Connect(function(Hit)
-                        local Character =  Hit.Parent
+            for i,button in pairs(AnimeModel.Buttons:GetChildren()) do
+                if not button:GetAttribute("Dependency") then 
+                    button:PivotTo(tycoon.MainItens.Floor.CFrame * AnimeModel.PrimaryPart.CFrame:ToObjectSpace(button:GetPivot()))
+                    button.Parent = NewFolder
+                    local debounce = false
+                    button.ButtonPart.Touched:Connect(function(Hit)
+                        local Character = Hit.Parent
                         local PlayerHit = Players:GetPlayerFromCharacter(Character)
 
-                        if PlayerHit == Player and DbTb[Button.Name] ~= true  then
-                            DbTb[Button.Name] = true
-                            TycoonEvents:Fire("Buy",Button)
-                            task.wait(1) 
-                            DbTb[Button.Name] = nil
-                            
+                        if PlayerHit == Player and debounce == false then
+                            debounce = true 
+                            TycoonEvents:Fire({func = "ItemBuy",content = {buttonName = button.Name}})
+                            task.wait(1.5)
+                            debounce = false
                         end
                     end)
-                   
-                    ButtonAdded(TycoonModel)
-                end
+                else
+                    ButtonsList[button.Name] = button
+                end    
             end
+            
+
+
         end,
         ["TycoonLoad"] =function(TycoonModel,Data) --Purchase
             
@@ -108,54 +122,46 @@ TycoonEvents:Connect(function(pars)
                         end
                     end)
                  
-                    ButtonAdded(TycoonModel)
+                    
                 end
                 
             end
         end,
-        ["ButtonUpdate"] = function(Button,TycoonModel)
-            Button:Destroy()
+        ["ButtonUpdate"] = function(content)
+            local buttonName = content.buttonName
+            local tycoonModel = content.tycoonModel
+            local AnimeModel = PowerDatas:GetAnimeModel(content.anime)
 
-            TycoonModel.Boughtitems.ChildAdded:Connect(function(Item)
-                for _, Button in pairs(ButtonsList) do
+            if not buttonName or not tycoonModel or not AnimeModel then return end
 
-                    print(Button:GetAttribute("Dependency"),Item)
-                    if Button:GetAttribute("Dependency") == Item.Name then
-                        Button.Parent = TycoonModel.Buttons 
-                        ButtonsList[Button.Name] = nil
-                        DbTb[Button.Name] = false
-                        Button.ButtonPart.Touched:Connect(function(Hit)
-                            local Character =  Hit.Parent
-                            local PlayerHit = Players:GetPlayerFromCharacter(Character)
+            tycoonModel.Buttons[buttonName]:Destroy()
 
-                            if PlayerHit == Player and DbTb[Button.Name] ~= true then
-                                DbTb[Button.Name] = true
-                                --Remotes.TycoonFunctions:InvokeServer("Buy",Button)
-                                task.wait(1)
-                                DbTb[Button.Name] = nil
-                                
-                            end
-                        end)
-                    end
+            for i,button in pairs(ButtonsList) do
+                local Dependency = button:GetAttribute("Dependency")
+
+                if tycoonModel.Boughtitems:FindFirstChild(Dependency) then
+                    button:PivotTo(tycoonModel.MainItens.Floor.CFrame * AnimeModel.PrimaryPart.CFrame:ToObjectSpace(button:GetPivot()))
+                    button.Parent = tycoonModel.Buttons
+                    ButtonsList[button.Name] = nil
+                    warn(button)
+                    local debounce = false 
+                    button.ButtonPart.Touched:Connect(function(Hit)
+                        print(1)
+                        local Character = Hit.Parent
+                        local PlayerHit = Players:GetPlayerFromCharacter(Character)
+
+                        if PlayerHit == Player and debounce == false then
+                            print(2)
+                            debounce = true 
+                            TycoonEvents:Fire({func = "ItemBuy",content = {buttonName = button.Name}})
+                            task.wait(1.5)
+                            debounce = false
+                        end
+                    end)
                 end
-            end)
-        end,
-        ["SpawnItemAnimate"] = function(pairs)
-            local CFrameValue = Instance.new("CFrameValue")
-            local tweenInfo = TweenInfo.new(TWEEN_TIME,TWEEN_STYLE,TWEEN_DIRECTION,TWEEN_LOOP,TWEEN_REVERSE,TWEEN_DELAY)
-            local tweenParameter = {Value = pairs.Destiny}
-            local tweenAnimate = TweenService.Create(CFrameValue,tweenInfo,tweenParameter)
-            tweenAnimate:Play()
-
-            CFrameValue.Changed:Connect(function()
-                pairs.Item:PivotTo(CFrameValue.Value)
-            end)
-            
-        end,
-        
-       
+            end
+        end
     }
-   
 --[[ 
     end)]]
 
@@ -164,61 +170,98 @@ TycoonEvents:Connect(function(pars)
     if Event then Event(pars.content) end
 end)
 
-MinionSpawned:Connect(function(pars)
+
+
+--[[MinionSpawned:Connect(function(pars)
+    
     local data = pars.data
-    local minion = pars.minion
+    local minionName = pars.minion
     local replicator = pars.replicator
     local tycoonModel = pars.tycoonModel
 
-    if not data or not minion or not replicator or not tycoonModel then return end 
+    if not data or not minionName or not replicator or not tycoonModel then return end 
 
-    local MinionPath = SimplePath.new(minion)
-    --WAY_POINT1
-    local PathList = {}
+    local minion = tycoonModel.MinionsInWorld[minionName]
 
-    for i,PathPoint in pairs(tycoonModel.MainItems.ConveyorBelt.Path:GetChildren())do
-        PathList[PathPoint.Name] = PathPoint
+    if not minion then return end 
+
+    local CurrencyPoint =  replicator.Spawner.SpawnerExit.WorldCFrame.Position
+    local OldPoint
+    local WaysLIST = {}
+    local Path = 1
+
+    for i,waypoint in pairs(tycoonModel.MainItens.ConveyorBelt.Path:GetChildren()) do
+        WaysLIST[waypoint.Name] = waypoint.Position
     end
-    local PathCurrent = PathList["WAY_POINT1"]
-    minion:PivotTo(replicator.Spawner:GetPivot())
-    minion.Parent = tycoonModel.MinionsSpawned
 
-    MinionPath:Run(PathCurrent)
+    local Animator = minion.Humanoid.Animator
+	local Animation = Instance.new("Animation")
+	Animation.Parent = Animator
+	Animation.AnimationId = "rbxassetid://14777263766"
+	local AnimationTrack = Animator:LoadAnimation(Animation)
+	task.wait()
 
-    local PathsNumber = 2
-    MinionPath._events.Reached:Connect(function()
+	AnimationTrack:Play()
 
-        if PathCurrent.Name == "GOAL" then
-            MinionPath:Stop()
-            MinionPath:Destroy()
-        end
-
-        PathCurrent = PathList["WAY_POINT"..tostring(PathsNumber)]
-        if not PathCurrent then
-            PathCurrent = PathList["GOAL"]
-        end
- 
-        PathsNumber += 1
-        MinionPath:Run(PathCurrent)
-    end)
-
-    MinionPath._events.Blocked:Connect(function()
-        MinionPath:Run(PathCurrent)
-    end)
+    minion.Humanoid:MoveTo(CurrencyPoint)
     
-    MinionPath._events.Error:Connect(function()
-        MinionPath:Run(PathCurrent)
+    minion.Humanoid.MoveToFinished:Connect(function()
+        if CurrencyPoint == WaysLIST["Goal"] then
+            minion:Destroy()
+        end
+
+        CurrencyPoint = WaysLIST["WAY_POINT"..Path]
+
+        if not CurrencyPoint then
+            CurrencyPoint = WaysLIST["GOAL"]
+        end
+
+        minion.Humanoid:MoveTo(CurrencyPoint)
+        Path += 1
     end)
 
-    MinionPath._events.Stopped:Connect(function()
-        MinionPath:Run(PathCurrent)
-    end)
 
-    --[[MinionsThreads[minion.Name] = RunService.RenderStepped:Connect(function()
+end)]]
+
+ItemSpawned:Connect(function(content)
+
+    local anime =  content.anime
+    local item = content.item 
+    local destiny = content.destiny
+    local origin = content.origin
+    local folder = content.folder
+
+    if not anime or not item or not destiny or not origin or not folder then return end  
+
+    local DistanceView = (item:GetPivot().Position - Character:GetPivot().Position).magnitude
+
+    item:PivotTo(destiny:GetPivot() * origin:GetPivot():ToObjectSpace(item:GetPivot()))
+
+    if DistanceView < 400 then
+        task.spawn(function()
+            local itemDestiny =  item:GetPivot()
+            item:PivotTo(itemDestiny * CFrame.new(0,80,0))
+
+            local CFrameValue = Instance.new("CFrameValue")
+            CFrameValue.Value = item:GetPivot()
+            local TweenAnimate = TweenService:Create(CFrameValue,tweenInfo,{Value = itemDestiny})
         
-    end)]]
+            CFrameValue.Changed:Connect(function()
+                item:PivotTo(CFrameValue.Value)
+            end)
 
-    
+            item.Parent = folder
+
+            TweenAnimate:Play()
+            TweenAnimate.Completed:Wait()
+            CFrameValue:Destroy()
+            TweenAnimate:Destroy()
+            
+        end)
+    else    
+        item.Parent = folder
+    end
+
 end)
 
 module = {}
