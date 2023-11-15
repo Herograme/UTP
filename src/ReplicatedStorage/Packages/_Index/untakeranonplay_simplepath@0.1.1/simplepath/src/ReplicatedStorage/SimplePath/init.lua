@@ -10,11 +10,11 @@ License: MIT
 
 local DEFAULT_SETTINGS = {
 
-	TIME_VARIANCE = 0.07;
+	TIME_VARIANCE = 0.07,
 
-	COMPARISON_CHECKS = 1;
+	COMPARISON_CHECKS = 1,
 
-	JUMP_WHEN_STUCK = true;
+	JUMP_WHEN_STUCK = true,
 }
 
 ---------------------------------------------------------------------
@@ -22,19 +22,19 @@ local DEFAULT_SETTINGS = {
 local PathfindingService = game:GetService("PathfindingService")
 local Players = game:GetService("Players")
 local function output(func, msg)
-	func(((func == error and "SimplePath Error: ") or "SimplePath: ")..msg)
+	func(((func == error and "SimplePath Error: ") or "SimplePath: ") .. msg)
 end
 local Path = {
 	StatusType = {
-		Idle = "Idle";
-		Active = "Active";
-	};
+		Idle = "Idle",
+		Active = "Active",
+	},
 	ErrorType = {
-		LimitReached = "LimitReached";
-		TargetUnreachable = "TargetUnreachable";
-		ComputationError = "ComputationError";
-		AgentStuck = "AgentStuck";
-	};
+		LimitReached = "LimitReached",
+		TargetUnreachable = "TargetUnreachable",
+		ComputationError = "ComputationError",
+		AgentStuck = "AgentStuck",
+	},
 }
 Path.__index = function(table, index)
 	if index == "Stopped" and not table._humanoid then
@@ -54,7 +54,8 @@ visualWaypoint.CanCollide = false
 visualWaypoint.Material = Enum.Material.Neon
 visualWaypoint.Shape = Enum.PartType.Ball
 
---[[ PRIVATE FUNCTIONS ]]--
+--[[ PRIVATE FUNCTIONS ]]
+--
 local function declareError(self, errorType)
 	self._lastError = errorType
 	self._events.Error:Fire(errorType)
@@ -67,8 +68,7 @@ local function createVisualWaypoints(waypoints)
 		local visualWaypointClone = visualWaypoint:Clone()
 		visualWaypointClone.Position = waypoint.Position
 		visualWaypointClone.Parent = workspace
-		visualWaypointClone.Color =
-			(waypoint == waypoints[#waypoints] and Color3.fromRGB(0, 255, 0))
+		visualWaypointClone.Color = (waypoint == waypoints[#waypoints] and Color3.fromRGB(0, 255, 0))
 			or (waypoint.Action == Enum.PathWaypointAction.Jump and Color3.fromRGB(255, 0, 0))
 			or Color3.fromRGB(255, 139, 0)
 		table.insert(visualWaypoints, visualWaypointClone)
@@ -100,7 +100,10 @@ end
 --Make NPC jump
 local function setJumpState(self)
 	pcall(function()
-		if self._humanoid:GetState() ~= Enum.HumanoidStateType.Jumping and self._humanoid:GetState() ~= Enum.HumanoidStateType.Freefall then
+		if
+			self._humanoid:GetState() ~= Enum.HumanoidStateType.Jumping
+			and self._humanoid:GetState() ~= Enum.HumanoidStateType.Freefall
+		then
 			self._humanoid:ChangeState(Enum.HumanoidStateType.Jumping)
 		end
 	end)
@@ -128,9 +131,10 @@ local function invokeWaypointReached(self)
 end
 
 local function moveToFinished(self, reached)
-	
 	--Stop execution if Path is destroyed
-	if not getmetatable(self) then return end
+	if not getmetatable(self) then
+		return
+	end
 
 	--Handle case for non-humanoids
 	if not self._humanoid then
@@ -149,7 +153,7 @@ local function moveToFinished(self, reached)
 		return
 	end
 
-	if reached and self._currentWaypoint + 1 <= #self._waypoints  then --Waypoint reached
+	if reached and self._currentWaypoint + 1 <= #self._waypoints then --Waypoint reached
 		if self._currentWaypoint + 1 < #self._waypoints then
 			invokeWaypointReached(self)
 		end
@@ -170,8 +174,12 @@ end
 
 --Refer to Settings.COMPARISON_CHECKS
 local function comparePosition(self)
-	if self._currentWaypoint == #self._waypoints then return end
-	self._position._count = ((self._agent.PrimaryPart.Position - self._position._last).Magnitude <= 0.07 and (self._position._count + 1)) or 0
+	if self._currentWaypoint == #self._waypoints then
+		return
+	end
+	self._position._count = (
+		(self._agent.PrimaryPart.Position - self._position._last).Magnitude <= 0.07 and (self._position._count + 1)
+	) or 0
 	self._position._last = self._agent.PrimaryPart.Position
 	if self._position._count >= self._settings.COMPARISON_CHECKS then
 		if self._settings.JUMP_WHEN_STUCK then
@@ -181,7 +189,8 @@ local function comparePosition(self)
 	end
 end
 
---[[ STATIC METHODS ]]--
+--[[ STATIC METHODS ]]
+--
 function Path.GetNearestCharacter(fromPosition)
 	local character, dist = nil, math.huge
 	for _, player in ipairs(Players:GetPlayers()) do
@@ -192,30 +201,31 @@ function Path.GetNearestCharacter(fromPosition)
 	return character
 end
 
---[[ CONSTRUCTOR ]]--
+--[[ CONSTRUCTOR ]]
+--
 function Path.new(agent, agentParameters, override)
 	if not (agent and agent:IsA("Model") and agent.PrimaryPart) then
 		output(error, "Pathfinding agent must be a valid Model Instance with a set PrimaryPart.")
 	end
 
 	local self = setmetatable({
-		_settings = override or DEFAULT_SETTINGS;
+		_settings = override or DEFAULT_SETTINGS,
 		_events = {
-			Reached = Instance.new("BindableEvent");
-			WaypointReached = Instance.new("BindableEvent");
-			Blocked = Instance.new("BindableEvent");
-			Error = Instance.new("BindableEvent");
-			Stopped = Instance.new("BindableEvent");
-		};
-		_agent = agent;
-		_humanoid = agent:FindFirstChildOfClass("Humanoid");
-		_path = PathfindingService:CreatePath(agentParameters);
-		_status = "Idle";
-		_t = 0;
+			Reached = Instance.new("BindableEvent"),
+			WaypointReached = Instance.new("BindableEvent"),
+			Blocked = Instance.new("BindableEvent"),
+			Error = Instance.new("BindableEvent"),
+			Stopped = Instance.new("BindableEvent"),
+		},
+		_agent = agent,
+		_humanoid = agent:FindFirstChildOfClass("Humanoid"),
+		_path = PathfindingService:CreatePath(agentParameters),
+		_status = "Idle",
+		_t = 0,
 		_position = {
-			_last = Vector3.new();
-			_count = 0;
-		};
+			_last = Vector3.new(),
+			_count = 0,
+		},
 	}, Path)
 
 	--Configure settings
@@ -234,8 +244,8 @@ function Path.new(agent, agentParameters, override)
 	return self
 end
 
-
---[[ NON-STATIC METHODS ]]--
+--[[ NON-STATIC METHODS ]]
+--
 function Path:Destroy()
 	for _, event in ipairs(self._events) do
 		event:Destroy()
@@ -269,7 +279,6 @@ function Path:Stop()
 end
 
 function Path:Run(target)
-
 	--Non-humanoid handle case
 	if not target and not self._humanoid and self._target then
 		moveToFinished(self, true)
@@ -292,14 +301,19 @@ function Path:Run(target)
 
 	--Compute path
 	local pathComputed, _ = pcall(function()
-		self._path:ComputeAsync(self._agent.PrimaryPart.Position, (typeof(target) == "Vector3" and target) or target.Position)
+		self._path:ComputeAsync(
+			self._agent.PrimaryPart.Position,
+			(typeof(target) == "Vector3" and target) or target.Position
+		)
 	end)
 
 	--Make sure path computation is successful
-	if not pathComputed
+	if
+		not pathComputed
 		or self._path.Status == Enum.PathStatus.NoPath
 		or #self._path:GetWaypoints() < 2
-		or (self._humanoid and self._humanoid:GetState() == Enum.HumanoidStateType.Freefall) then
+		or (self._humanoid and self._humanoid:GetState() == Enum.HumanoidStateType.Freefall)
+	then
 		self._visualWaypoints = destroyVisualWaypoints(self._visualWaypoints)
 		task.wait()
 		declareError(self, self.ErrorType.ComputationError)
@@ -329,9 +343,12 @@ function Path:Run(target)
 	self._visualWaypoints = (self.Visualize and createVisualWaypoints(self._waypoints))
 
 	--Create a new move connection if it doesn't exist already
-	self._moveConnection = self._humanoid and (self._moveConnection or self._humanoid.MoveToFinished:Connect(function(...)
-		moveToFinished(self, ...)
-	end))
+	self._moveConnection = self._humanoid
+		and (
+			self._moveConnection or self._humanoid.MoveToFinished:Connect(function(...)
+				moveToFinished(self, ...)
+			end)
+		)
 
 	--Begin pathfinding
 	if self._humanoid then

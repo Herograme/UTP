@@ -1,0 +1,73 @@
+Date : 2023-11-12 00:43:41
+Directory : d:\ROBLOX STUDIO\Rojo\UTP\src
+Total : 22 files,  258 codes, 33 comments, 60 blanks, all 351 lines
+
+Languages
++----------+------------+------------+------------+------------+------------+
+| language | files      | code       | comment    | blank      | total      |
++----------+------------+------------+------------+------------+------------+
+| Lua      |         19 |        249 |         33 |         60 |        342 |
+| JSON     |          3 |          9 |          0 |          0 |          9 |
++----------+------------+------------+------------+------------+------------+
+
+Directories
++-------------------------------------------------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| path                                                                                                                                                  | files      | code       | comment    | blank      | total      |
++-------------------------------------------------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| .                                                                                                                                                     |         22 |        258 |         33 |         60 |        351 |
+| ReplicatedFirst                                                                                                                                       |          1 |         -1 |          1 |          0 |          0 |
+| ReplicatedFirst\GameLoading                                                                                                                           |          1 |         -1 |          1 |          0 |          0 |
+| ReplicatedStorage                                                                                                                                     |          5 |        190 |          6 |         32 |        228 |
+| ReplicatedStorage\ClientServices                                                                                                                      |          4 |        174 |          2 |         34 |        210 |
+| ReplicatedStorage\ClientServices (Files)                                                                                                              |          1 |         -1 |          0 |         -8 |         -9 |
+| ReplicatedStorage\ClientServices\SkillSystemClient                                                                                                    |          3 |        175 |          2 |         42 |        219 |
+| ReplicatedStorage\Packages                                                                                                                            |          1 |         16 |          4 |         -2 |         18 |
+| ReplicatedStorage\Packages\_Index                                                                                                                     |          1 |         16 |          4 |         -2 |         18 |
+| ReplicatedStorage\Packages\_Index\untakeranonplay_simplepath@0.1.1                                                                                    |          1 |         16 |          4 |         -2 |         18 |
+| ReplicatedStorage\Packages\_Index\untakeranonplay_simplepath@0.1.1\simplepath                                                                         |          1 |         16 |          4 |         -2 |         18 |
+| ReplicatedStorage\Packages\_Index\untakeranonplay_simplepath@0.1.1\simplepath\src                                                                     |          1 |         16 |          4 |         -2 |         18 |
+| ReplicatedStorage\Packages\_Index\untakeranonplay_simplepath@0.1.1\simplepath\src\ReplicatedStorage                                                   |          1 |         16 |          4 |         -2 |         18 |
+| ReplicatedStorage\Packages\_Index\untakeranonplay_simplepath@0.1.1\simplepath\src\ReplicatedStorage\SimplePath                                        |          1 |         16 |          4 |         -2 |         18 |
+| ServerScriptService                                                                                                                                   |          1 |          0 |          1 |          0 |          1 |
+| ServerStorage                                                                                                                                         |          8 |        117 |          2 |         27 |        146 |
+| ServerStorage\Services                                                                                                                                |          2 |          4 |          0 |        -12 |         -8 |
+| ServerStorage\SkillSystem                                                                                                                             |          6 |        113 |          2 |         39 |        154 |
+| ServerStorage\SkillSystem (Files)                                                                                                                     |          2 |          7 |          0 |          4 |         11 |
+| ServerStorage\SkillSystem\Skills                                                                                                                      |          4 |        106 |          2 |         35 |        143 |
+| StarterPlayer                                                                                                                                         |          7 |        -48 |         23 |          1 |        -24 |
+| StarterPlayer\StarterCharacterScripts                                                                                                                 |          2 |       -634 |        -46 |       -121 |       -801 |
+| StarterPlayer\StarterPlayerScripts                                                                                                                    |          5 |        586 |         69 |        122 |        777 |
+| StarterPlayer\StarterPlayerScripts (Files)                                                                                                            |          1 |          3 |          0 |          0 |          3 |
+| StarterPlayer\StarterPlayerScripts\PlayerModule                                                                                                       |          4 |        583 |         69 |        122 |        774 |
+| StarterPlayer\StarterPlayerScripts\PlayerModule (Files)                                                                                               |          2 |         32 |          3 |         10 |         45 |
+| StarterPlayer\StarterPlayerScripts\PlayerModule\ControlModule                                                                                         |          2 |        551 |         66 |        112 |        729 |
++-------------------------------------------------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+
+Files
++-------------------------------------------------------------------------------------------------------------------------------------------------------+----------+------------+------------+------------+------------+
+| filename                                                                                                                                              | language | code       | comment    | blank      | total      |
++-------------------------------------------------------------------------------------------------------------------------------------------------------+----------+------------+------------+------------+------------+
+| d:\ROBLOX STUDIO\Rojo\UTP\src\ReplicatedFirst\GameLoading\GameLoadingService.lua                                                                      | Lua      |         -1 |          1 |          0 |          0 |
+| d:\ROBLOX STUDIO\Rojo\UTP\src\ReplicatedStorage\ClientServices\SkillAnimator.lua                                                                      | Lua      |         -1 |          0 |         -8 |         -9 |
+| d:\ROBLOX STUDIO\Rojo\UTP\src\ReplicatedStorage\ClientServices\SkillSystemClient\Clones.lua                                                           | Lua      |         23 |          2 |          8 |         33 |
+| d:\ROBLOX STUDIO\Rojo\UTP\src\ReplicatedStorage\ClientServices\SkillSystemClient\Kamehameha.lua                                                       | Lua      |         27 |          0 |         11 |         38 |
+| d:\ROBLOX STUDIO\Rojo\UTP\src\ReplicatedStorage\ClientServices\SkillSystemClient\Rasengan.lua                                                         | Lua      |        125 |          0 |         23 |        148 |
+| d:\ROBLOX STUDIO\Rojo\UTP\src\ReplicatedStorage\Packages\_Index\untakeranonplay_simplepath@0.1.1\simplepath\src\ReplicatedStorage\SimplePath\init.lua | Lua      |         16 |          4 |         -2 |         18 |
+| d:\ROBLOX STUDIO\Rojo\UTP\src\ServerScriptService\PlayerConnectionService.server.lua                                                                  | Lua      |          0 |          1 |          0 |          1 |
+| d:\ROBLOX STUDIO\Rojo\UTP\src\ServerStorage\Services\CacheMananger.lua                                                                                | Lua      |          0 |          0 |        -10 |        -10 |
+| d:\ROBLOX STUDIO\Rojo\UTP\src\ServerStorage\Services\SkillMananger.lua                                                                                | Lua      |          4 |          0 |         -2 |          2 |
+| d:\ROBLOX STUDIO\Rojo\UTP\src\ServerStorage\SkillSystem\CommonFuncs.lua                                                                               | Lua      |          5 |          0 |          4 |          9 |
+| d:\ROBLOX STUDIO\Rojo\UTP\src\ServerStorage\SkillSystem\HitBoxMananger.lua                                                                            | Lua      |          2 |          0 |          0 |          2 |
+| d:\ROBLOX STUDIO\Rojo\UTP\src\ServerStorage\SkillSystem\Skills\Clones.lua                                                                             | Lua      |         62 |          1 |         18 |         81 |
+| d:\ROBLOX STUDIO\Rojo\UTP\src\ServerStorage\SkillSystem\Skills\Kamehameha.lua                                                                         | Lua      |         25 |          0 |          6 |         31 |
+| d:\ROBLOX STUDIO\Rojo\UTP\src\ServerStorage\SkillSystem\Skills\Rasengan.lua                                                                           | Lua      |         20 |          0 |         11 |         31 |
+| d:\ROBLOX STUDIO\Rojo\UTP\src\ServerStorage\SkillSystem\Skills\Wind_Smash.lua                                                                         | Lua      |         -1 |          1 |          0 |          0 |
+| d:\ROBLOX STUDIO\Rojo\UTP\src\StarterPlayer\StarterCharacterScripts\Animate.client.lua                                                                | Lua      |          0 |          1 |          3 |          4 |
+| d:\ROBLOX STUDIO\Rojo\UTP\src\StarterPlayer\StarterCharacterScripts\AnimateBkg.client.lua                                                             | Lua      |       -634 |        -47 |       -124 |       -805 |
+| d:\ROBLOX STUDIO\Rojo\UTP\src\StarterPlayer\StarterPlayerScripts\PlayerModule\ControlModule\init.lua                                                  | Lua      |        548 |         66 |        112 |        726 |
+| d:\ROBLOX STUDIO\Rojo\UTP\src\StarterPlayer\StarterPlayerScripts\PlayerModule\ControlModule\init.meta.json                                            | JSON     |          3 |          0 |          0 |          3 |
+| d:\ROBLOX STUDIO\Rojo\UTP\src\StarterPlayer\StarterPlayerScripts\PlayerModule\init.lua                                                                | Lua      |         29 |          3 |         10 |         42 |
+| d:\ROBLOX STUDIO\Rojo\UTP\src\StarterPlayer\StarterPlayerScripts\PlayerModule\init.meta.json                                                          | JSON     |          3 |          0 |          0 |          3 |
+| d:\ROBLOX STUDIO\Rojo\UTP\src\StarterPlayer\StarterPlayerScripts\init.meta.json                                                                       | JSON     |          3 |          0 |          0 |          3 |
+| Total                                                                                                                                                 |          |        258 |         33 |         60 |        351 |
++-------------------------------------------------------------------------------------------------------------------------------------------------------+----------+------------+------------+------------+------------+

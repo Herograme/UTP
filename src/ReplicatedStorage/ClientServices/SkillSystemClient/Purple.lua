@@ -37,11 +37,7 @@ return function (PlayerOrigin:Player,hitbox:Part,SkillAnimation:Animation)
     AnimationTrack:Play(0.2)
     warn("Purple")
     
-
     AnimationTrack:AdjustSpeed(0)
-
-    print(contprint)
-    contprint += 1
 
     task.wait(0.5)
     --AnimationTrack:AdjustSpeed(0)
@@ -51,9 +47,6 @@ return function (PlayerOrigin:Player,hitbox:Part,SkillAnimation:Animation)
     Blue.CFrame = OffsetInWorld(OFFSET_BLUE,PlayerOrigin)
     Red.CFrame = OffsetInWorld(OFFSET_RED,PlayerOrigin)
 
-    print(contprint)
-    contprint += 1
-
     Blue.Parent = PlayerOrigin.Character
     Blue.Spawn.ParticleEmitter:Emit(1) 
     task.wait(1)
@@ -61,16 +54,12 @@ return function (PlayerOrigin:Player,hitbox:Part,SkillAnimation:Animation)
     Red.Spawn.ParticleEmitter:Emit(1)
     task.wait(1)
 
-    print(contprint)
-    contprint += 1
-
     local tweenTable:Part = {}
     tweenTable.CFrame = OffsetInWorld(OFFSET_CENTRAL,PlayerOrigin)
 
     TweenService:Create(Blue,infoTW,tweenTable):Play()
     TweenService:Create(Red,infoTW,tweenTable):Play()
     task.wait(1.2)
-
 
     local SkillModel:Model = ReplicatedStorage.AnimeEffects.Purple:Clone()
     SkillModel:PivotTo(Origin)
@@ -83,6 +72,9 @@ return function (PlayerOrigin:Player,hitbox:Part,SkillAnimation:Animation)
     SkillModel.PrimaryPart.Anchored = false
     SkillModel.Parent = hitbox
 
+    Red:Destroy()
+    Blue:Destroy()
+
     for i,ParticleEmitter:ParticleEmitter in pairs(SkillModel:GetDescendants()) do
         if ParticleEmitter:IsA("ParticleEmitter") then
             ParticleEmitter.Enabled = true
@@ -92,12 +84,6 @@ return function (PlayerOrigin:Player,hitbox:Part,SkillAnimation:Animation)
     AnimationTrack:AdjustSpeed(1)
    
     AnimationTrack.Ended:Wait()
+    PlayerOrigin.Character:SetAttribute("AnimationState",false)
     PlayerOrigin.Character.HumanoidRootPart.Anchored = false
-
-    
-    
-    --AnimationTrack:AdjustSpeed(1)
-
-
-    
 end

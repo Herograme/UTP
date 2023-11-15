@@ -96,8 +96,6 @@ function module:GetPlayerCache(Player)
     return Caches[Player.UserId]
 end
 
-
-
 function module:CheckPersonAvailable(Person)
     print(Person)
     if table.find(module.persons_selected,Person) then
@@ -107,14 +105,4 @@ function module:CheckPersonAvailable(Person)
 end
 
 return module
-
-
-
-
-
-
-
-
-
-
 

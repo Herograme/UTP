@@ -37,7 +37,8 @@ local utilities = require(ServerStorage.Services.Utilities)
 local SkillMananger = require(ServerStorage.Services.SkillMananger)
 local HitBoxMananger = require(ServerStorage.SkillSystem.HitBoxMananger)
 
-local cmdr = require(ReplicatedStorage.Packages.cmdr)
+local Cmdr = require(ReplicatedStorage.Packages.cmdr)
+
 
 
 
@@ -53,7 +54,9 @@ _G.SetMoney = function(Value)
 end
 --------------
 
-cmdr:RegisterDefaultCommands()
+Cmdr:RegisterDefaultCommands()
+Cmdr:RegisterCommandsIn(ServerStorage.Cmdr.Commands)
+Cmdr:RegisterTypesIn(ServerStorage.Cmdr.Types)
 
 DataMananger:Init()
 TycoonMananger:Init()

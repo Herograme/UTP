@@ -13,6 +13,7 @@ local ExpandBar = MainFrame.LoadingBar.ExpandBar
 
 ReplicatedFirst:RemoveDefaultLoadingScreen()
 
+
 local Assets = {
     unpack(game.ReplicatedFirst:GetDescendants()),
     unpack(game.Players:GetDescendants()),
@@ -27,7 +28,6 @@ local Assets = {
 	unpack(game.StarterPack:GetDescendants()),
     unpack(game.Workspace.TycoonModels:GetDescendants()),
     unpack(game.Workspace.TycoonBases:GetDescendants()),
-
 }
 
 module = {} 
@@ -48,10 +48,10 @@ function module:Init()
         if i == #Assets then
             task.wait(1)
             local info = TweenInfo.new(0.5,Enum.EasingStyle.Linear,Enum.EasingDirection.Out,0,false,0)
-            local Goal = {}
-            Goal.Size = UDim2.fromScale(0,0)
+            local Goal:CanvasGroup = {}
+            Goal.GroupTransparency = 1
             local TweenAnimate:TweenBase= TweenService:Create(MainFrame,info,Goal)
-            TweenService:Create(MainFrame.BackGround.ImageLabel,info,Goal):Play()
+            --TweenService:Create(MainFrame.BackGround.ImageLabel,info,Goal):Play()
             TweenAnimate:Play()
             TweenAnimate.Completed:Wait()
             LoadingScreen:Destroy()

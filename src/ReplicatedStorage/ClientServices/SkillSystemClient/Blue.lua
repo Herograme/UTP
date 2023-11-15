@@ -27,6 +27,7 @@ return function (PlayerOrigin:Player,hitbox:Part,SkillAnimation:Animation)
 
         task.wait(1.23)
         SkillModel.External:Destroy()
+        PlayerOrigin.Character:SetAttribute("AnimationState",false)
         PlayerOrigin.Character.HumanoidRootPart.Anchored = false
         AnimationTrack:AdjustSpeed(1)
     end)

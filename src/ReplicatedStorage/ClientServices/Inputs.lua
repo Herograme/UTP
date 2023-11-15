@@ -38,11 +38,11 @@ local InputTypes = {
 
         if not Skill or DebounceSkill[Skill] then return end 
         DebounceSkill[Skill] = true
-        
-        Player.Character.HumanoidRootPart.Anchored = true
-        FireSkill:Fire({input = Input,Direction = mouse.Hit})
-        
 
+        Player.Character.HumanoidRootPart.Anchored = true
+        
+        FireSkill:Fire({input = Input,Direction = mouse.Hit})
+      
         task.delay(CooldownTime,function()
             DebounceSkill[Skill] = nil
         end)

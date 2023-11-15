@@ -20,22 +20,28 @@ local mainFolder_Workspace = workspace
 local playersPets =mainFolder_Workspace.PlayerData.PlayerPets
 
 game.Players.PlayerAdded:Connect(function(player)
+    player.CharacterAdded:Connect(function(Character)
+        repeat
+            task.wait()
+        until Character:IsDescendantOf(workspace)
+        
+        Character.Parent = workspace.characters
+        player.Character:SetAttribute("AnimationState",false)
+        --GuiLoader:Fire(player,{"load"}) 
+    end)   
+
     player:SetAttribute("Cash",0)
     player:SetAttribute("Shards",0)
     player:SetAttribute("OwnsTycoon",false)
     player:SetAttribute("CurrentInput","Skill")
+    
 
-    player:SetAttribute("Q","Red")
+    player:SetAttribute("Q","Kamehameha")
     player:SetAttribute("E","Blue")
     player:SetAttribute("R","Purple")   
 
     local TycoonBases = workspace.TycoonModels:GetChildren()
-	
-	--TycoonEvents:Fire(player,{Func="OuterButtonsDestroyer",content = TycoonBases})
-    
-    player.CharacterAdded:Connect(function()
-        GuiLoader:Fire(player,{"load"}) 
-    end)   
+	--TycoonEvents:Fire(player,{Func="OuterButtonsDestroyer",content = TycoonBases}
 end)
 
 

@@ -1,27 +1,32 @@
 local character = script.Parent
-local humanoid = character:WaitForChild"Humanoid"
-local animator = humanoid:WaitForChild"Animator"
+local humanoid = character:WaitForChild("Humanoid")
+local animator = humanoid:WaitForChild("Animator")
+local UnAvailable = false 
+
 
 local animationTracks = {
 	cheer = {"rbxassetid://507770677", Enum.AnimationPriority.Idle},
-	Climb = {"rbxassetid://507765644", Enum.AnimationPriority.Core},
 	dance = {"rbxassetid://507772104", Enum.AnimationPriority.Idle},
 	dance2 = {"rbxassetid://507776879", Enum.AnimationPriority.Idle},
 	dance3 = {"rbxassetid://507777623", Enum.AnimationPriority.Idle},
-	Fall = {"rbxassetid://507767968", Enum.AnimationPriority.Core},
-	Idle = {"rbxassetid://14777253718", Enum.AnimationPriority.Core},
+	wave = {"rbxassetid://507770239", Enum.AnimationPriority.Idle},
 	laugh = {"rbxassetid://507770818", Enum.AnimationPriority.Idle},
 	Lunge = {"rbxassetid://522638767", Enum.AnimationPriority.Movement, Play = nil},
 	point = {"rbxassetid://507770453", Enum.AnimationPriority.Idle},
-	Run = {"rbxassetid://14777263766", Enum.AnimationPriority.Core},
-	Sit = {"rbxassetid://2506281703", Enum.AnimationPriority.Core},
-	Slash = {"rbxassetid://522635514", Enum.AnimationPriority.Movement, Play = nil},
-	Swim = {"rbxassetid://913384386", Enum.AnimationPriority.Core},
-	SwimIdle = {"rbxassetid://913389285", Enum.AnimationPriority.Core},
-	Tool = {"rbxassetid://507768375", Enum.AnimationPriority.Idle, Play = nil},
-	wave = {"rbxassetid://507770239", Enum.AnimationPriority.Idle}}
 
-local animation = Instance.new"Animation"
+	Climb = {"rbxassetid://507765644", Enum.AnimationPriority.Movement},
+	Fall = {"rbxassetid://507767968", Enum.AnimationPriority.Idle},
+	Idle = {"rbxassetid://14777253718", Enum.AnimationPriority.Idle},
+	Run = {"rbxassetid://14777263766", Enum.AnimationPriority.Movement},
+	Sit = {"rbxassetid://2506281703", Enum.AnimationPriority.Core},
+	Slash = {"rbxassetid://522635514", Enum.AnimationPriority.Action, Play = nil},
+	Swim = {"rbxassetid://913384386", Enum.AnimationPriority.Movement},
+	SwimIdle = {"rbxassetid://913389285", Enum.AnimationPriority.Idle},
+	Tool = {"rbxassetid://507768375", Enum.AnimationPriority.Idle, Play = nil},
+}
+
+
+local animation = Instance.new("Animation")
 
 for key, value in animationTracks do
 	animation.AnimationId = value[1]
@@ -32,8 +37,23 @@ for key, value in animationTracks do
 end
 animator, animation = animation:Destroy()
 
-local animationTrack = animationTracks.Idle
-animationTrack:Play()
+local animationTrack:AnimationTrack = animationTracks.Idle
+
+script.Parent.AttributeChanged:Connect(function(AttributeChanged)
+	if AttributeChanged ~= "AnimationState" then return end
+
+	UnAvailable = script.Parent:GetAttribute(AttributeChanged)
+	
+	if UnAvailable == true then
+		animationTrack:Stop()
+	else
+		animationTrack:Play(0.3)
+	end
+end)
+
+if UnAvailable == false then
+	animationTrack:Play()
+end
 
 local childAdded
 
@@ -68,6 +88,7 @@ end)
 character = nil
 
 humanoid.Climbing:Connect(function(speed)
+	if UnAvailable then return end 
 	local climb = animationTracks.Climb
 
 	if climb.IsPlaying then
@@ -80,6 +101,7 @@ humanoid.Climbing:Connect(function(speed)
 end)
 
 humanoid.FreeFalling:Connect(function(active)
+	if UnAvailable then return end 
 	if active then
 		animationTrack:Stop()
 		animationTrack = animationTracks.Fall
@@ -88,6 +110,7 @@ humanoid.FreeFalling:Connect(function(active)
 end)
 
 humanoid.Running:Connect(function(speed)
+	if UnAvailable then return end 
 	speed /= 16
 
 	if speed > 1e-2 then
@@ -108,6 +131,7 @@ humanoid.Running:Connect(function(speed)
 end)
 
 humanoid.Seated:Connect(function(active)
+	if UnAvailable then return end 
 	if active then
 		animationTrack:Stop()
 		animationTrack = animationTracks.Sit
@@ -116,6 +140,7 @@ humanoid.Seated:Connect(function(active)
 end)
 
 humanoid.Swimming:Connect(function(speed)
+	if UnAvailable then return end 
 	speed /= 10
 
 	if speed > 1 then
@@ -140,7 +165,7 @@ humanoid.Swimming:Connect(function(speed)
 end)
 humanoid = nil
 
-game.TextChatService:WaitForChild"TextChatCommands":WaitForChild"RBXEmoteCommand".Triggered:Connect(function(_, text)
+--[[game.TextChatService:WaitForChild"TextChatCommands":WaitForChild"RBXEmoteCommand".Triggered:Connect(function(_, text)
 	text = string.split(text, ' ')[2]
 
 	local emotes = {
@@ -172,4 +197,4 @@ game.TextChatService:WaitForChild"TextChatCommands":WaitForChild"RBXEmoteCommand
 			end
 		end
 	end
-end)
+end)]]

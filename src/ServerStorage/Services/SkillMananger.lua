@@ -17,8 +17,11 @@ local IdList = {
     ["Blue"] = "15115659933",
     ["Red"] = "15115662179",
     ["Purple"] = "14777262539",
-    
-
+    ["Wind_Smash"] = "15199629620",
+    ["Kamehameha"] = "14777396785",
+    ["Rasengan1"] = "15234914919",
+    ["Rasengan2"] = "15234930814",
+    ["Clones"] = "15304259390",
 }
 
 function module:Init()

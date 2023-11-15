@@ -212,17 +212,7 @@ module =  {
     }
 }
 
-GuiEvents:Connect(function(pars)
-    local Event = module.GuiControl[pars.func] 
-    print(Event)
-    --if Event then
-        Event(pars.content)
-    --end
-end)
-
-GuiLoader:Connect(function(Value)
-    warn("Load")
-
+function module:init()
     for _,anime in pairs(PowerDatas.Animes) do
 
        
@@ -256,6 +246,20 @@ GuiLoader:Connect(function(Value)
              end)
          end
     end
+end
+
+GuiEvents:Connect(function(pars)
+    local Event = module.GuiControl[pars.func] 
+    print(Event)
+    --if Event then
+        Event(pars.content)
+    --end
+end)
+
+GuiLoader:Connect(function(Value)
+    
+
+   
 end)
 
 
