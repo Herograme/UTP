@@ -22,6 +22,7 @@ local IdList = {
     ["Rasengan1"] = "15234914919",
     ["Rasengan2"] = "15234930814",
     ["Clones"] = "15304259390",
+    ["Run"] = "15364188965",
 }
 
 function module:Init()
